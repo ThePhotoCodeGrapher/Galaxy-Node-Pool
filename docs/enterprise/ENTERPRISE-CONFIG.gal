@@ -1,0 +1,111 @@
+<!-- Version: 1.0.0 | Type: config.galaxy.enterprise | Protocol: .gal | Last Updated: 2025-05-28 -->
+# ENTERPRISE-CONFIG.gal
+
+## Purpose
+Defines the configuration options for Galaxy Node Pool enterprise features, including main net integration, Stellar blockchain, and federation services, following the Gelato Protocol standard.
+
+## Enterprise Configuration
+
+### Overview
+Enterprise configuration options control how a Galaxy Node Pool interacts with the main net, manages blockchain operations, and participates in the federation protocol. These settings are separated from the core pool configuration for security and licensing reasons.
+
+### Configuration File Structure
+Enterprise configuration is stored in a separate YAML file from the main pool configuration:
+
+```yaml
+# Enterprise configuration for Galaxy Node Pool
+enterprise:
+  # Main net connection settings
+  mainnet:
+    registry_address: "mainnet.registry.galaxy.network:50051"
+    registration_fee: "5"
+    api_key: "..."
+    heartbeat_interval: "5m"
+    auto_register: true
+  
+  # Stellar blockchain integration
+  stellar:
+    horizon_url: "https://horizon.stellar.org"
+    network_passphrase: "Public Global Stellar Network ; September 2015"
+    pool_seed: "S..."  # Secret seed for the pool's Stellar account
+    mainnet_account: "G..."  # Public key of the main net account
+    staker_reward_percentage: 70
+  
+  # Federation protocol settings
+  federation:
+    sync_interval: "15m"
+    max_pools: 100
+    cross_pool_discovery: true
+    cache_ttl: "1h"
+  
+  # Staker rewards settings
+  rewards:
+    distribution_schedule: "weekly"
+    minimum_distribution: "1.0"
+    fee_percentage: 2
+  
+  # Enterprise plugins
+  plugins:
+    - name: "compliance-verifier"
+      enabled: true
+      config:
+        verification_level: "standard"
+    - name: "insurance-provider"
+      enabled: false
+      config:
+        coverage_limit: "1000"
+    - name: "analytics-engine"
+      enabled: true
+      config:
+        data_retention_days: 30
+```
+
+## Configuration Options
+
+### Main Net Settings
+- **registry_address**: Address of the main net registry service
+- **registration_fee**: Amount of XLM to pay for registration
+- **api_key**: Optional API key for authenticated access
+- **heartbeat_interval**: How often to send heartbeats to main net
+- **auto_register**: Whether to automatically register with main net on startup
+
+### Stellar Settings
+- **horizon_url**: URL of the Stellar Horizon API
+- **network_passphrase**: Stellar network identifier
+- **pool_seed**: Secret seed for the pool's Stellar account
+- **mainnet_account**: Public key of the main net account
+- **staker_reward_percentage**: Percentage of fees distributed to stakers
+
+### Federation Settings
+- **sync_interval**: How often to synchronize with other pools
+- **max_pools**: Maximum number of peer pools to track
+- **cross_pool_discovery**: Whether to enable cross-pool node discovery
+- **cache_ttl**: Time-to-live for cached federation data
+
+### Rewards Settings
+- **distribution_schedule**: When to distribute rewards (daily, weekly, monthly)
+- **minimum_distribution**: Minimum amount to distribute
+- **fee_percentage**: Percentage of node registration fees to collect
+
+### Enterprise Plugins
+- **compliance-verifier**: Verifies node compliance with protocol standards
+- **insurance-provider**: Provides insurance for node failures
+- **analytics-engine**: Collects and analyzes network data
+
+## Security Considerations
+- The enterprise configuration file should have restricted permissions
+- Stellar seed phrases must be kept secure
+- API keys should be rotated regularly
+- TLS should be enabled for all external connections
+
+## Environment Variables
+Enterprise configuration can also be set via environment variables:
+- `GALAXY_ENTERPRISE_MAINNET_REGISTRY_ADDRESS`
+- `GALAXY_ENTERPRISE_MAINNET_API_KEY`
+- `GALAXY_ENTERPRISE_STELLAR_POOL_SEED`
+- `GALAXY_ENTERPRISE_STELLAR_HORIZON_URL`
+- etc.
+
+---
+
+# End of ENTERPRISE-CONFIG.gal

@@ -1,0 +1,42 @@
+<!-- Version: 1.0.0 | Type: cli.galaxy.pool | Protocol: .gal | Last Updated: 2025-05-28 -->
+# POOL-CLI.gal
+
+## Purpose
+Documents the command-line interface for managing Galaxy Node Pools, following the Gelato Protocol standard.
+
+## CLI Usage
+
+### Starting a Pool
+```bash
+galaxy-cli pool start --config configs/my-pool.yaml
+```
+
+### Registering with Main Net
+```bash
+galaxy-cli pool register --mainnet mainnet.registry.galaxy.network:50051
+```
+
+### Full Options
+```
+Usage:
+  galaxy-cli pool [command]
+
+Available Commands:
+  start       Start a Galaxy pool
+  register    Register a pool with the main net
+
+Flags:
+  -c, --config string   Config file path (default "configs/example.yaml")
+  -v, --verbose         Enable verbose output
+```
+
+## Main Net Registration
+All pools (public or private) must register with the main net to:
+- Be discoverable by nodes and clients
+- Contribute to protocol value and staker rewards
+- Access optional main net services
+- Maintain protocol compliance
+
+---
+
+# End of POOL-CLI.gal

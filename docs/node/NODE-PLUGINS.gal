@@ -1,0 +1,15 @@
+<!-- Version: 1.0.0 | Type: plugins.galaxy.node | Protocol: .gal | Last Updated: 2025-05-28 -->
+# NODE-PLUGINS.gal
+
+## Purpose
+Defines available/optional plugins for Galaxy Nodes. Each plugin extends the node with new features, hooks, or integrations.
+
+## Example Plugins
+- logging-plugin
+- metrics-plugin
+- resource-monitor
+- custom-auth
+
+---
+
+# End of NODE-PLUGINS.gal

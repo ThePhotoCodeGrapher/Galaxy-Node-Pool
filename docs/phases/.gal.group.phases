@@ -1,0 +1,12 @@
+<!-- Version: 1.0.0 | Type: group.galaxy.phases | Protocol: .gal | Last Updated: 2025-05-28 -->
+# .gal.group.phases
+
+## Purpose
+Defines the group of all Galaxy development and deployment phases. Provides navigation and structure for phase-related `.gal` files.
+
+## Members
+- PHASES.gal
+
+---
+
+# End of .gal.group.phases

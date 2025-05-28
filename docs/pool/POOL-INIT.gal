@@ -1,0 +1,20 @@
+<!-- Version: 1.0.0 | Type: init.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# POOL-INIT.gal
+
+## Purpose
+Describes the initialization and bootstrap process for a new Galaxy Node Pool instance.
+
+## Steps
+1. Configure `example.yaml` with pool/server settings
+2. Build and run the pool engine (Go binary or Docker)
+3. Register plugins via config
+4. Start accepting node registrations and heartbeats
+5. Monitor logs and metrics
+
+## Notes
+- Reference POOL-CONFIG.gal for all settings
+- Reference POOL-PLUGINS.gal for available plugins
+
+---
+
+# End of POOL-INIT.gal

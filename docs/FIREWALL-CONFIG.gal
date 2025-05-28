@@ -1,0 +1,116 @@
+# Galaxy Node Pool Firewall Configuration
+
+## Overview
+This document outlines the firewall configuration required for running Galaxy Node Pool servers in various environments.
+
+## Required Ports
+
+### Core Services
+- **3000**: Main API service
+- **3001**: gRPC service for node communication
+- **8080**: Web interface (if enabled)
+
+### SSL/TLS
+- **80**: HTTP (for Let's Encrypt verification)
+- **443**: HTTPS
+
+## Firewall Rules (UFW)
+
+### Basic Setup
+```bash
+# Allow SSH (always keep this enabled)
+sudo ufw allow 22/tcp
+
+# Allow Galaxy Node Pool core services
+sudo ufw allow 3000/tcp
+sudo ufw allow 3001/tcp
+sudo ufw allow 8080/tcp
+
+# Allow HTTP/HTTPS for web interface and Let's Encrypt
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Enable the firewall
+sudo ufw enable
+```
+
+### Testnet-Specific Configuration
+For testnet environments, you may want to restrict access:
+
+```bash
+# Remove general access
+sudo ufw delete allow 3000/tcp
+sudo ufw delete allow 3001/tcp
+sudo ufw delete allow 8080/tcp
+
+# Allow access only from specific IPs
+sudo ufw allow from 192.168.1.0/24 to any port 3000
+sudo ufw allow from 192.168.1.0/24 to any port 3001
+sudo ufw allow from 192.168.1.0/24 to any port 8080
+
+# Or limit to specific interfaces
+sudo ufw allow in on eth1 to any port 3000
+sudo ufw allow in on eth1 to any port 3001
+sudo ufw allow in on eth1 to any port 8080
+```
+
+## Firewall Rules (iptables)
+
+### Basic Setup
+```bash
+# Allow established connections
+sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Allow SSH
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Allow Galaxy Node Pool services
+sudo iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 3001 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
+
+# Allow HTTP/HTTPS
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# Set default policies
+sudo iptables -P INPUT DROP
+sudo iptables -P FORWARD DROP
+sudo iptables -P OUTPUT ACCEPT
+
+# Save rules
+sudo iptables-save | sudo tee /etc/iptables/rules.v4
+```
+
+## Security Recommendations
+
+1. **Limit Access**: Only open necessary ports
+2. **Use Rate Limiting**: Prevent brute force attacks
+3. **Implement IP Whitelisting**: For production environments
+4. **Regular Audits**: Review firewall rules periodically
+5. **Log Analysis**: Monitor for suspicious activities
+
+## Troubleshooting
+
+### Checking Firewall Status
+```bash
+# UFW
+sudo ufw status verbose
+
+# iptables
+sudo iptables -L -v
+```
+
+### Common Issues
+1. **Connection Refused**: Check if the port is open
+2. **Timeout**: Check if the firewall is blocking the connection
+3. **Service Unavailable**: Verify the service is running
+
+### Testing Connectivity
+```bash
+# Test if a port is open
+nc -zv <server-ip> <port>
+
+# Check listening ports
+ss -tulpn | grep <port>
+```

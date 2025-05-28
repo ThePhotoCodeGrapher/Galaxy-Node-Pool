@@ -1,0 +1,327 @@
+# Galaxy Node Pool Nginx Configuration
+
+## Overview
+This document provides Nginx configuration guidelines for hosting Galaxy Node Pool services in various environments.
+
+## Basic Configuration
+
+### HTTP to HTTPS Redirect
+```nginx
+server {
+    listen 80;
+    server_name pool.example.com;
+    
+    location / {
+        return 301 https://$host$request_uri;
+    }
+    
+    # Let's Encrypt verification
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+}
+```
+
+### HTTPS Configuration
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name pool.example.com;
+    
+    # SSL Configuration
+    ssl_certificate /etc/letsencrypt/live/pool.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/pool.example.com/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/pool.example.com/chain.pem;
+    
+    # SSL Settings
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;
+    
+    # HSTS
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    
+    # Logs
+    access_log /var/log/nginx/pool.example.com.access.log;
+    error_log /var/log/nginx/pool.example.com.error.log;
+    
+    # API Service
+    location /api/ {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+    
+    # Web Interface
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
+```
+
+## Testnet Configuration
+
+### Automated Testnet Configuration
+
+The Galaxy Node Pool CLI now provides automated Nginx configuration generation for testnet environments:
+
+```bash
+# Initialize a testnet with Nginx configuration
+galaxy-pool testnet init mypool --nginx
+
+# Generate Nginx configuration for an existing testnet
+galaxy-pool testnet config nginx mypool
+```
+
+### Template-Based Configuration
+
+The CLI uses a template-based approach for generating Nginx configurations. The template supports variable substitution for dynamic configuration:
+
+```nginx
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name ${pool_env}.pool.galaxy.net.${org_id}.asia.hybridconnect.cloud;
+    
+    # SSL Configuration
+    ssl_certificate ${ssl_cert};
+    ssl_certificate_key ${ssl_key};
+    
+    # API Service
+    location /api/ {
+        proxy_pass http://127.0.0.1:${api_port}/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    
+    # WebSocket Service
+    location /ws/ {
+        proxy_pass http://127.0.0.1:${ws_port}/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+    
+    # Web UI
+    location / {
+        proxy_pass http://127.0.0.1:${web_port}/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+### Additional Security Measures
+
+For testnet environments, you may want to add additional security measures:
+
+```nginx
+# IP Restriction
+allow 192.168.1.0/24;  # Allow specific IP range
+deny all;              # Deny all other IPs
+
+# Basic Authentication
+auth_basic "Testnet Access";
+auth_basic_user_file /etc/nginx/.htpasswd;
+
+# Rate Limiting
+limit_req_zone $binary_remote_addr zone=testnetlimit:10m rate=10r/s;
+limit_req zone=testnetlimit burst=20 nodelay;
+```
+
+## Load Balancing Configuration
+
+For high-availability deployments with multiple Galaxy Node Pool instances:
+
+```nginx
+upstream galaxy_pool_api {
+    server 10.0.0.1:3000;
+    server 10.0.0.2:3000;
+    server 10.0.0.3:3000;
+}
+
+upstream galaxy_pool_web {
+    server 10.0.0.1:8080;
+    server 10.0.0.2:8080;
+    server 10.0.0.3:8080;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name pool.example.com;
+    
+    # SSL Configuration (same as above)
+    
+    # API Service
+    location /api/ {
+        proxy_pass http://galaxy_pool_api;
+        # Other proxy settings
+    }
+    
+    # Web Interface
+    location / {
+        proxy_pass http://galaxy_pool_web;
+        # Other proxy settings
+    }
+}
+```
+
+## Wildcard Domain Configuration
+
+### Automated Wildcard Domain Configuration
+
+The Galaxy Node Pool CLI provides automated support for wildcard domains:
+
+```bash
+# Initialize a testnet with wildcard domain support
+galaxy-pool testnet init mypool --org-id myorg --nginx
+
+# Generate SSL certificate for wildcard domain
+galaxy-pool testnet ssl generate --pool-name mypool --org-id myorg
+```
+
+### Wildcard Domain Pattern
+
+The standard pattern for wildcard domains in Galaxy Node Pool is:
+
+```
+*.{pool_env}.pool.galaxy.net.{org_id}.asia.hybridconnect.cloud
+```
+
+Where:
+- `{pool_env}` is the pool environment (e.g., test, dev, prod)
+- `{org_id}` is the organization identifier
+
+### Nginx Configuration for Wildcard Domains
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name ~^(?<node_id>[^.]+)\.(?<pool_env>[^.]+)\.pool\.galaxy\.net\.(?<org_id>[^.]+)\.asia\.hybridconnect\.cloud$;
+    
+    # SSL Configuration
+    ssl_certificate /etc/letsencrypt/live/wildcard.pool.galaxy.net.example.asia.hybridconnect.cloud/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/wildcard.pool.galaxy.net.example.asia.hybridconnect.cloud/privkey.pem;
+    
+    # Custom Headers
+    proxy_set_header X-Galaxy-Node-ID $node_id;
+    proxy_set_header X-Galaxy-Pool-Env $pool_env;
+    proxy_set_header X-Galaxy-Org-ID $org_id;
+    
+    # API Service
+    location /api/ {
+        proxy_pass http://localhost:3000;
+        # Other proxy settings
+    }
+    
+    # Web Interface
+    location / {
+        proxy_pass http://localhost:8080;
+        # Other proxy settings
+    }
+}
+```
+
+## SSL Certificate Management
+
+### Automated SSL Certificate Generation
+
+The Galaxy Node Pool CLI provides automated SSL certificate management:
+
+```bash
+# Generate self-signed certificate for testnet
+galaxy-pool testnet ssl generate
+
+# Generate production-grade certificate with Let's Encrypt
+galaxy-pool testnet ssl generate --production
+
+# Generate certificate for specific pool and organization
+galaxy-pool testnet ssl generate --pool-name mypool --org-id myorg
+```
+
+### Wildcard Certificate Generation
+
+For wildcard domains, the DNS challenge method is required:
+
+```bash
+# Configure DNS provider
+vim ~/.galaxy/cert-config.yaml
+
+# Example configuration:
+# email: admin@example.com
+# dns_provider: cloudflare
+# credentials:
+#   api_key: your-api-key
+#   email: your-email@example.com
+
+# Generate wildcard certificate
+galaxy-pool testnet ssl generate --production --pool-name mypool --org-id myorg
+```
+
+### Manual Certificate Generation
+
+To manually generate SSL certificates with Let's Encrypt:
+
+```bash
+# Install Certbot
+sudo apt update
+sudo apt install -y certbot python3-certbot-nginx
+
+# For regular domains
+sudo certbot --nginx -d pool.example.com -d testnet.pool.example.com
+
+# For wildcard domains
+sudo apt install -y python3-certbot-dns-cloudflare
+sudo certbot certonly --dns-cloudflare \
+  --dns-cloudflare-credentials /path/to/credentials.ini \
+  -d "*.pool.galaxy.net.example.asia.hybridconnect.cloud" \
+  --preferred-challenges dns-01
+
+# Auto-renewal
+sudo certbot renew --dry-run
+```
+```
+
+## Troubleshooting
+
+### Common Issues
+1. **502 Bad Gateway**: Check if the backend service is running
+2. **504 Gateway Timeout**: Increase proxy timeouts
+3. **SSL Certificate Errors**: Check certificate paths and permissions
+
+### Nginx Status
+```bash
+# Test configuration
+sudo nginx -t
+
+# Check status
+sudo systemctl status nginx
+
+# View logs
+sudo tail -f /var/log/nginx/error.log
+```

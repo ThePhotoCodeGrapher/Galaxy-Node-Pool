@@ -1,0 +1,32 @@
+<!-- Version: 1.0.0 | Type: versioning.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# VERSIONING.gal
+
+## Purpose
+Defines the versioning strategy for the Galaxy Node Pool and Node components, following the Gelato Protocol standard.
+
+## Versioning Strategy
+- Semantic Versioning (MAJOR.MINOR.PATCH)
+- MAJOR: Breaking changes to API or protocol
+- MINOR: New features, backward compatible
+- PATCH: Bug fixes, backward compatible
+
+## Current Versions
+- Galaxy Node Pool: 0.1.0 (Beta)
+- Galaxy Node: 0.1.0 (Beta)
+- Protocol: 1.0.0
+
+## Version History
+- 0.1.0 (2025-05-28): Initial beta release
+  - Modular architecture
+  - Plugin system
+  - Public/private pool support
+  - Main net federation
+
+## Release Cycle
+- Beta releases: Monthly
+- Stable releases: Quarterly
+- LTS releases: Yearly
+
+---
+
+# End of VERSIONING.gal

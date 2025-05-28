@@ -1,0 +1,98 @@
+<!-- Version: 1.0.0 | Type: protocol.galaxy.federation | Protocol: .gal | Last Updated: 2025-05-28 -->
+# FEDERATION-PROTOCOL.gal
+
+## Purpose
+Defines the federation protocol for Galaxy Node Pools to communicate with the main net and other pools, following the Gelato Protocol standard.
+
+## Federation Protocol Architecture
+
+### Overview
+The Federation Protocol enables Galaxy Node Pools to form a cohesive network by connecting to the main net and discovering other pools and their nodes. This creates a unified Galaxy Network while preserving the independence of individual pools.
+
+### Components
+- **Main Net Registry**: Central registry of all pools
+- **Pool Discovery**: Mechanism for finding other pools
+- **Cross-Pool Node Discovery**: Finding nodes across multiple pools
+- **Federation API**: gRPC API for federation operations
+- **Synchronization**: Keeping pool information up-to-date
+
+### Federation Flow
+1. Pool registers with main net (via Stellar transaction)
+2. Pool periodically sends heartbeats to main net
+3. Pool queries main net for other pools
+4. Pool establishes direct connections with other pools
+5. Clients can discover nodes across multiple pools
+
+## API Specification
+
+### Main Net API
+```protobuf
+service MainNetRegistry {
+  // Register a pool with the main net
+  rpc RegisterPool(RegisterPoolRequest) returns (RegisterPoolResponse);
+  
+  // Send a heartbeat to keep pool registration active
+  rpc PoolHeartbeat(PoolHeartbeatRequest) returns (PoolHeartbeatResponse);
+  
+  // List all registered pools
+  rpc ListPools(ListPoolsRequest) returns (ListPoolsResponse);
+  
+  // Get detailed information about a pool
+  rpc GetPoolDetails(GetPoolDetailsRequest) returns (GetPoolDetailsResponse);
+}
+```
+
+### Federation API
+```protobuf
+service FederationService {
+  // Query nodes across multiple pools
+  rpc FederatedNodeQuery(FederatedNodeQueryRequest) returns (FederatedNodeQueryResponse);
+  
+  // Verify a node's status across pools
+  rpc VerifyNodeStatus(VerifyNodeStatusRequest) returns (VerifyNodeStatusResponse);
+  
+  // Synchronize pool metadata
+  rpc SyncPoolMetadata(SyncPoolMetadataRequest) returns (SyncPoolMetadataResponse);
+}
+```
+
+## Implementation Details
+
+### Federation Plugin
+The Federation Plugin handles all interactions with the main net and other pools:
+- Registration with main net
+- Pool discovery
+- Cross-pool communication
+- State synchronization
+
+### Configuration
+```yaml
+federation:
+  mainnet:
+    registry_address: "mainnet.registry.galaxy.network:50051"
+    registration_fee: "5"
+    api_key: "..."
+  sync:
+    interval: "15m"
+    max_pools: 100
+  security:
+    tls_enabled: true
+    cert_file: "/path/to/cert.pem"
+    key_file: "/path/to/key.pem"
+```
+
+## Cross-Pool Discovery
+- **Direct Query**: Client queries multiple pools directly
+- **Federated Query**: Client queries one pool, which queries others
+- **Cached Results**: Pools cache results from other pools
+- **Specialized Routing**: Queries routed to pools with specialized nodes
+
+## Security Considerations
+- All federation traffic should use TLS
+- Pools should verify the identity of other pools
+- Rate limiting should be implemented
+- Sensitive metadata should be encrypted
+
+---
+
+# End of FEDERATION-PROTOCOL.gal

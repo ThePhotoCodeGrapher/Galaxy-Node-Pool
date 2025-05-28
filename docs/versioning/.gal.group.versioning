@@ -1,0 +1,13 @@
+<!-- Version: 1.0.0 | Type: group.galaxy.versioning | Protocol: .gal | Last Updated: 2025-05-28 -->
+# .gal.group.versioning
+
+## Purpose
+Defines the group of all Galaxy versioning protocol and strategy files. Provides navigation and structure for versioning-related `.gal` files.
+
+## Members
+- VERSIONING.gal
+- GAL-SCAN.gal
+
+---
+
+# End of .gal.group.versioning

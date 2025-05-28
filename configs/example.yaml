@@ -1,0 +1,63 @@
+# Example configuration for galaxy-node-pool
+
+server:
+  address: 0.0.0.0:50051
+  tls:
+    enabled: true
+    cert_file: /etc/ssl/certs/pool.crt
+    key_file: /etc/ssl/private/pool.key
+  # Max number of simultaneous connections to the pool server
+  max_connections: 500
+  # CPU/memory resource limits for the pool server (for Docker/k8s)
+  resources:
+    cpu_limit: "2"
+    memory_limit: "2Gi"
+  # Node geo-location and metadata
+  location:
+    region: "eu-central"
+    datacenter: "castlepalette-dc1"
+    coordinates: "52.52,13.40"
+
+registry:
+  allow_public_registration: true
+  allowed_orgs: [] # List of orgs for private pools
+  health_check_interval: 30s
+  # Max number of nodes that can register with this pool
+  max_nodes: 100
+  # Node auto-deregistration policy (e.g. after X missed heartbeats)
+  auto_deregister_after: 3
+  # Plugins to load for registry (modular extensions)
+  plugins:
+    - name: "auth-plugin"
+      enabled: true
+      config:
+        api_keys: ["key1", "key2"]
+    - name: "metrics-plugin"
+      enabled: true
+      config:
+        push_gateway: "http://metrics.local:9091"
+
+logging:
+  level: info
+  format: json
+  file: /var/log/galaxy-node-pool.log
+
+# Plugin system (modular extensions for pool or node)
+plugins:
+  # Example: custom authentication, metrics, external storage
+  - name: "custom-auth"
+    enabled: false
+    config:
+      allowed_ips: ["192.168.1.0/24"]
+  - name: "resource-monitor"
+    enabled: true
+    config:
+      alert_threshold: 80
+
+# Docker runtime settings (for containerized deployment)
+docker:
+  restart_policy: always
+  network_mode: bridge
+  environment:
+    - NODE_POOL_ENV=production
+    - NODE_POOL_REGION=eu-central

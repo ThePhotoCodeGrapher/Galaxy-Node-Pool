@@ -1,0 +1,25 @@
+<!-- Version: 1.0.0 | Type: config.galaxy.node | Protocol: .gal | Last Updated: 2025-05-28 -->
+# NODE-CONFIG.gal
+
+## Purpose
+Documents all configuration options and environment variables for a Galaxy Node, following the Gelato Protocol standard.
+
+## Structure
+- Node identity, specialization, endpoint, resource limits, plugins, etc.
+- Main net registration and pool discovery settings
+
+
+## Example Settings
+- node_id: string
+- specialization: string
+- endpoint: string
+- org: string
+- private_node: bool
+- resources:
+    cpu_limit: "1"
+    memory_limit: "1Gi"
+- plugins: list of plugin configs
+
+---
+
+# End of NODE-CONFIG.gal

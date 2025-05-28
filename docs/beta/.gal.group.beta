@@ -1,0 +1,13 @@
+<!-- Version: 1.0.0 | Type: group.galaxy.beta | Protocol: .gal | Last Updated: 2025-05-28 -->
+# .gal.group.beta
+
+## Purpose
+Defines the group of all Galaxy beta testing and launch files. Provides navigation and structure for beta and launch-related `.gal` files.
+
+## Members
+- BETA-SETUP.gal
+- LAUNCH.gal
+
+---
+
+# End of .gal.group.beta

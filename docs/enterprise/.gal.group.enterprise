@@ -1,0 +1,16 @@
+<!-- Version: 1.0.0 | Type: group.galaxy.enterprise | Protocol: .gal | Last Updated: 2025-05-28 | AI-ID: CP-GAL-NODEPOOL-001 | Organization: Castle Palette Cloud A.I. | Website: https://hybridconnect.cloud/ -->
+# .gal.group.enterprise
+
+## Purpose
+Defines the group of all Galaxy Node Pool enterprise components, including main net integration, Stellar blockchain, and federation services. These components are separated from the public pool components for security and licensing reasons.
+
+## Members
+- MAINNET-INTEGRATION.gal
+- STELLAR-INTEGRATION.gal
+- FEDERATION-PROTOCOL.gal
+- STAKER-REWARDS.gal
+- ENTERPRISE-CONFIG.gal
+
+---
+
+# End of .gal.group.enterprise

@@ -1,0 +1,167 @@
+# Galaxy Node Pool Testnet Setup
+
+## Overview
+This document provides instructions for setting up and running a Galaxy Node Pool on the testnet. The testnet environment allows for testing node registration, discovery, and job submission without affecting the production network.
+
+## Prerequisites
+- Galaxy Node Pool CLI installed
+- Go 1.20 or higher
+- Access to Stellar testnet (for token operations)
+- Docker and Docker Compose (for containerized deployment)
+- Nginx (for production-like deployments)
+
+## Testnet Configuration
+
+### 1. Initialize Testnet Environment
+```bash
+# Basic initialization
+galaxy-pool testnet init mypool
+
+# With organization ID
+galaxy-pool testnet init mypool --org-id myorg
+
+# With Nginx configuration and SSL certificate generation
+galaxy-pool testnet init mypool --org-id myorg --nginx --ssl
+```
+
+### 2. View Testnet Configuration
+```bash
+galaxy-pool testnet config show mypool
+```
+
+### 3. Configure Stellar Testnet
+```bash
+# Generate a new Stellar testnet account
+galaxy-pool stellar account create --testnet
+
+# Fund the account from testnet friendbot
+galaxy-pool stellar account fund --testnet
+```
+
+## Starting a Testnet Pool
+
+### 1. Start the Testnet Pool
+```bash
+galaxy-pool testnet start mypool
+```
+
+### 2. Verify Testnet Pool Status
+```bash
+galaxy-pool testnet status mypool
+```
+
+### 3. Stop the Testnet Pool
+```bash
+galaxy-pool testnet stop mypool
+```
+
+## Registering Nodes
+
+### 1. Initialize a Node
+```bash
+galaxy-pool node init testnode --testnet
+```
+
+### 2. Configure Node Specialization
+```bash
+galaxy-pool node config testnode --specialization developer
+```
+
+### 3. Register Node with Pool
+```bash
+galaxy-pool node register testnode --pool testpool --testnet
+```
+
+### 4. Start the Node
+```bash
+galaxy-pool node start testnode --testnet
+```
+
+### 5. Verify Node Status
+```bash
+galaxy-pool node status testnode --testnet
+```
+
+## Testing Node Discovery
+
+### 1. List Available Nodes
+```bash
+galaxy-pool pool nodes testpool --testnet
+```
+
+### 2. Query Nodes by Specialization
+```bash
+galaxy-pool pool query testpool --specialization developer --testnet
+```
+
+## Monitoring and Metrics
+
+### 1. View Pool Metrics
+```bash
+galaxy-pool pool metrics testpool --testnet
+```
+
+### 2. View Node Metrics
+```bash
+galaxy-pool node metrics testnode --testnet
+```
+
+## Troubleshooting
+
+### Common Issues
+1. **Connection Errors**: Ensure the pool server is running and accessible
+2. **Authentication Failures**: Verify your Stellar account is properly funded
+3. **Node Registration Failures**: Check node configuration and network connectivity
+
+### Logs
+```bash
+# View pool server logs
+galaxy-pool pool logs testpool --testnet
+
+# View node logs
+galaxy-pool node logs testnode --testnet
+```
+
+## SSL Certificate Management
+
+### 1. Generate Self-Signed Certificate for Testnet
+```bash
+galaxy-pool testnet ssl generate
+```
+
+### 2. Generate Production-Grade Certificate
+```bash
+# For wildcard domains, requires DNS provider configuration
+galaxy-pool testnet ssl generate --production --pool-name mypool --org-id myorg
+```
+
+### 3. Configure DNS Provider for Wildcard Certificates
+```bash
+# Edit the certificate configuration file
+vim ~/.galaxy/cert-config.yaml
+
+# Example configuration:
+# email: admin@example.com
+# dns_provider: cloudflare
+# credentials:
+#   api_key: your-api-key
+#   email: your-email@example.com
+```
+
+## Cleanup
+
+### 1. Stop Node
+```bash
+galaxy-pool node stop testnode --testnet
+```
+
+### 2. Stop Testnet Pool
+```bash
+galaxy-pool testnet stop mypool
+```
+
+### 3. Remove Pool and Node Data (Optional)
+```bash
+galaxy-pool testnet delete mypool
+galaxy-pool node delete testnode --testnet
+```

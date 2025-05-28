@@ -1,0 +1,38 @@
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (C) 2025 Castle Palette Cloud A.I.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+NOTICE: The Galaxy Node Pool includes enterprise components that are proprietary
+to Castle Palette Cloud A.I. and are not covered by this open source license.
+These components are located in the following directories:
+- internal/enterprise/
+- internal/mainnet/
+- configs/enterprise/
+- configs/mainnet/
+- cmd/main-pool-server/
+- docs/main-pool/
+
+For licensing information about these components, please contact
+licensing@hybridconnect.cloud
+
+---
+
+**AI-ID**: CP-GAL-NODEPOOL-001  
+**Documentation**: [https://docs.hybridconnect.cloud/galaxy-node-pool/license](https://docs.hybridconnect.cloud/galaxy-node-pool/license)  
+**Maintained by**: [Castle Palette Cloud A.I.](https://hybridconnect.cloud)

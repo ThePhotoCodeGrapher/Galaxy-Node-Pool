@@ -1,0 +1,66 @@
+<!-- Version: 1.0.0 | Type: integration.galaxy.stellar | Protocol: .gal | Last Updated: 2025-05-28 -->
+# STELLAR-INTEGRATION.gal
+
+## Purpose
+Defines the integration between Galaxy Node Pool and the Stellar blockchain for identity, payments, and rewards, following the Gelato Protocol standard.
+
+## Stellar Integration Architecture
+
+### Overview
+The Galaxy Network uses Stellar as its underlying blockchain for identity verification, payments, and reward distribution. This provides a lightweight, fast, and cost-effective solution without requiring a custom blockchain.
+
+### Components
+- **Identity**: Node and pool identity tied to Stellar accounts
+- **Payments**: Registration fees and usage fees paid in GAL tokens (Stellar asset)
+- **Transactions**: Pool operations recorded as Stellar transactions with memos
+- **Rewards**: Stakers receive rewards from pool fees through Stellar distribution
+
+### Stellar Account Structure
+- **Main Net Account**: Central account for the Galaxy Network
+- **Pool Accounts**: Each pool has its own Stellar account
+- **Node Accounts**: Each node can have its own Stellar account
+- **Staker Accounts**: Accounts holding GAL tokens and receiving rewards
+
+### Transaction Types
+- **Pool Registration**: Payment to main net with memo containing pool metadata
+- **Node Registration**: Payment to pool with memo containing node metadata
+- **Reward Distribution**: Payments from pools to stakers based on activity
+- **Fee Collection**: Payments from nodes to pools for services
+
+## Implementation Details
+
+### Stellar Client
+The Stellar client handles all interactions with the Stellar network:
+- Account creation and management
+- Transaction creation and submission
+- Payment verification
+- Signature verification
+
+### Configuration
+```yaml
+stellar:
+  horizon_url: "https://horizon.stellar.org"  # Mainnet
+  # horizon_url: "https://horizon-testnet.stellar.org"  # Testnet
+  network_passphrase: "Public Global Stellar Network ; September 2015"
+  pool_seed: "S..."  # Secret seed for the pool's Stellar account
+  mainnet_account: "G..."  # Public key of the main net account
+  registration_fee: "5"  # XLM amount for registration
+  staker_reward_percentage: 70  # Percentage of fees distributed to stakers
+```
+
+### Security Considerations
+- Pool seeds must be stored securely and never exposed
+- All transactions should use multi-signature when possible
+- Regular key rotation is recommended
+- Monitor for suspicious transactions
+
+## GAL Token
+- **Asset Code**: GAL
+- **Issuer**: Main net Stellar account
+- **Distribution**: Initial allocation to founding nodes and stakers
+- **Utility**: Required for node registration and service fees
+- **Staking**: Holders can stake tokens to receive rewards
+
+---
+
+# End of STELLAR-INTEGRATION.gal

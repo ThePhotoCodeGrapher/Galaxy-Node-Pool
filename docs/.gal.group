@@ -1,0 +1,37 @@
+<!-- Version: 1.0.0 | Type: group.galaxy.root | Protocol: .gal | Last Updated: 2025-05-28 | AI-ID: CP-GAL-NODEPOOL-001 | Organization: Castle Palette Cloud A.I. | Website: https://hybridconnect.cloud/ -->
+# .gal.group (Galaxy Node Pool Root Group)
+
+## Purpose
+Defines the top-level group for all Galaxy Node Pool documentation, configuration, and protocol files. Provides unified navigation and structure for the entire Galaxy ecosystem following the Gelato Protocol standard.
+
+## Members
+- pool/.gal.group.pool             # All pool-related .gal files
+- POOL-ARCHITECTURE.gal            # Overall architecture of the Galaxy Node Pool
+- POOL-CONFIG.gal                  # Configuration options for the pool
+- NODE-CONFIG.gal                  # Configuration options for nodes
+- POOL-ROADMAP.gal                 # Development roadmap and milestones
+- MAIN-POOL-OVERVIEW.gal           # Main pool architecture and eligibility requirements
+- node/.gal.group.node             # All node-related .gal files
+- versioning/.gal.group.versioning # All versioning-related .gal files
+- phases/.gal.group.phases         # All phase-related .gal files
+- beta/.gal.group.beta             # All beta and launch-related .gal files
+- enterprise/.gal.group.enterprise # All enterprise and main net integration .gal files
+
+## Usage
+- Reference this file as the entry point for the GAL Protocol documentation and config.
+- Each subgroup contains domain-specific .gal files organized by purpose.
+- This structure follows the Gelato Protocol's modular, discoverable documentation pattern.
+- Extend with more groups (e.g., client, orchestration, protocol-wide) as needed.
+
+## Navigation
+- For pool configuration and architecture: See pool/.gal.group.pool
+- For node configuration and plugins: See node/.gal.group.node
+- For versioning strategy: See versioning/.gal.group.versioning
+- For development phases: See phases/.gal.group.phases
+- For beta testing and launch: See beta/.gal.group.beta
+- For enterprise and main net integration: See enterprise/.gal.group.enterprise
+- For main pool architecture and eligibility: See MAIN-POOL-OVERVIEW.gal
+
+---
+
+# End of .gal.group

@@ -1,0 +1,17 @@
+<!-- Version: 1.0.0 | Type: group.galaxy.node | Protocol: .gal | Last Updated: 2025-05-28 -->
+# .gal.group.node
+
+## Purpose
+Defines the group of all Galaxy Node protocol, config, and process files. Provides navigation and structure for node-related `.gal` files.
+
+> Note: Pool-related docs are grouped separately in `.gal.group.pool`.
+
+
+## Members
+- NODE-CONFIG.gal
+- NODE-PLUGINS.gal
+- NODE-TIMELINE.gal
+
+---
+
+# End of .gal.group.node

@@ -1,0 +1,39 @@
+<!-- Version: 1.0.0 | Type: plugins.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# POOL-PLUGINS.gal
+
+## Purpose
+Defines the plugin system and all available/optional plugins for the Galaxy Node Pool. Each plugin extends the pool with new features, hooks, or integrations.
+
+## Plugin Structure
+- name: Unique plugin identifier
+- enabled: Boolean toggle
+- config: Plugin-specific settings
+
+## Example Plugins
+
+### Authentication Plugin
+- name: auth-plugin
+- enabled: true
+- config:
+    api_keys: ["key1", "key2"]
+    allowed_ips: ["192.168.1.0/24"]
+
+### Metrics Plugin
+- name: metrics-plugin
+- enabled: true
+- config:
+    push_gateway: "http://metrics.local:9091"
+
+### Resource Monitor Plugin
+- name: resource-monitor
+- enabled: true
+- config:
+    alert_threshold: 80
+
+## Extensibility
+- Add new plugin entries as needed.
+- Reference this file in POOL-CONFIG.gal and architecture docs.
+
+---
+
+# End of POOL-PLUGINS.gal

@@ -1,0 +1,37 @@
+<!-- Version: 1.0.0 | Type: beta.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# BETA-SETUP.gal
+
+## Purpose
+Defines the beta testing program for the Galaxy Node Pool and Node components, following the Gelato Protocol standard.
+
+## Beta Program Details
+- Start Date: 2025-06-01
+- Duration: 3 months
+- Participants: Selected organizations and community members
+- Feedback Mechanism: GitHub Issues, Discord, Weekly Calls
+
+## Beta Requirements
+- Docker environment
+- 2 CPU cores, 4GB RAM minimum
+- Public IP or port forwarding for node discovery
+- GitHub account for issue tracking
+- Discord account for community support
+
+## Beta Setup Process
+1. Clone the repository
+2. Configure pool/node settings in configs/example.yaml
+3. Run with Docker: `docker-compose up -d`
+4. Register with main net (beta): `galaxy-pool register --mainnet beta.galaxy.network:50051`
+5. Monitor logs and metrics
+6. Report issues and feedback
+
+## Beta Success Metrics
+- 99.9% uptime for pools
+- <100ms node discovery latency
+- Successful federation with main net
+- Plugin system extensibility validation
+- Security assessment completion
+
+---
+
+# End of BETA-SETUP.gal

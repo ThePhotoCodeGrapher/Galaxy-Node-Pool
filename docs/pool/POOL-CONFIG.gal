@@ -1,0 +1,59 @@
+<!-- Version: 1.0.0 | Type: config.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# POOL-CONFIG.gal
+
+## Purpose
+Defines all configuration settings, environment variables, and modular options for the Galaxy Node Pool, following the Gelato Protocol standard.
+
+## Structure
+- YAML/ENV settings for server, registry, plugins, Docker, logging, etc.
+- Each setting is described with its type, default, and purpose.
+
+## Settings
+
+### mainnet
+- registry_address: string (e.g., mainnet.registry.galaxy.network:50051)
+- registration_fee: string (amount in GAL or protocol token)
+- api_key: string (optional, for authentication)
+
+### server
+- address: string (default: 0.0.0.0:50051)
+- tls.enabled: bool (default: true)
+- tls.cert_file: string (path to cert)
+- tls.key_file: string (path to key)
+- max_connections: int (default: 500)
+- resources.cpu_limit: string (e.g. "2")
+- resources.memory_limit: string (e.g. "2Gi")
+- location.region: string
+- location.datacenter: string
+- location.coordinates: string
+
+### registry
+- allow_public_registration: bool
+- allowed_orgs: list of string
+- health_check_interval: duration (e.g. 30s)
+- max_nodes: int
+- auto_deregister_after: int (missed heartbeats)
+- plugins: list of plugin configs
+
+### logging
+- level: string (info, debug, warn, error)
+- format: string (json, text)
+- file: string (path)
+
+### plugins
+- name: string
+- enabled: bool
+- config: object (plugin-specific)
+
+### docker
+- restart_policy: string
+- network_mode: string
+- environment: list of string
+
+## Extensibility
+- Add new sections as new features, plugins, or modules are added.
+- Reference this file in all pool and node documentation.
+
+---
+
+# End of POOL-CONFIG.gal

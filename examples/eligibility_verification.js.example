@@ -1,0 +1,238 @@
+/**
+ * Galaxy Node Pool - Main Pool Eligibility Verification Script
+ * 
+ * This script calculates staking requirements and verifies eligibility
+ * for nodes and organizations to connect to the main Galaxy pool.
+ * 
+ * In the actual implementation, this would be part of the main pool codebase
+ * which is excluded from the open source repository.
+ */
+
+// Constants for staking calculations
+const BASE_STAKE_ORGANIZATION = 1000;  // Base stake for organizations in HCCO tokens
+const BASE_STAKE_NODE = 100;           // Base stake for individual nodes in HCCO tokens
+const CAPACITY_FACTOR_MULTIPLIER = 0.1;  // Per TB of storage
+const POWER_FACTOR_MULTIPLIER = 0.2;     // Per 100 compute units
+const GAS_FACTOR_MULTIPLIER = 0.5;       // Per daily GAS generation unit
+
+// Constants for SOLID status requirements
+const MIN_COMPLETED_TASKS = 500;        // Minimum number of completed AI worker tasks
+const MIN_UPTIME_PERCENTAGE = 99.5;     // Minimum uptime percentage
+const MIN_QUALITY_RATING = 4.8;         // Minimum quality rating (out of 5.0)
+const MIN_POOL_OPERATION_DAYS = 14;     // Minimum days of operating own pool
+const PROBATION_PERIOD_DAYS = 7;        // Probationary period for new nodes
+const COOLING_OFF_PERIOD_DAYS = 30;     // Cooling off period after eligibility revocation
+
+/**
+ * Calculate required stake for an organization based on node capacity,
+ * processing power, and GAS generation rate.
+ * 
+ * @param {number} nodeCapacityGB - Storage capacity in GB
+ * @param {number} processingPower - Processing power in compute units
+ * @param {number} dailyGasGeneration - Daily GAS generation rate
+ * @returns {number} - Required stake in HCCO tokens
+ */
+function calculateOrganizationStake(nodeCapacityGB, processingPower, dailyGasGeneration) {
+  // Convert GB to TB for calculation
+  const nodeCapacityTB = nodeCapacityGB / 1024;
+  
+  // Calculate factors
+  const capacityFactor = 1.0 + (CAPACITY_FACTOR_MULTIPLIER * nodeCapacityTB);
+  const powerFactor = 1.0 + (POWER_FACTOR_MULTIPLIER * (processingPower / 100));
+  const gasFactor = 1.0 + (GAS_FACTOR_MULTIPLIER * dailyGasGeneration);
+  
+  // Calculate total required stake
+  const requiredStake = BASE_STAKE_ORGANIZATION * capacityFactor * powerFactor * gasFactor;
+  
+  // Round up to nearest whole token
+  return Math.ceil(requiredStake);
+}
+
+/**
+ * Calculate required stake for an individual node based on its capabilities.
+ * 
+ * @param {number} nodeCapacityGB - Storage capacity in GB
+ * @param {number} processingPower - Processing power in compute units
+ * @param {string} specialization - Node specialization type
+ * @returns {number} - Required stake in HCCO tokens
+ */
+function calculateNodeStake(nodeCapacityGB, processingPower, specialization) {
+  // Base stake for all nodes
+  let requiredStake = BASE_STAKE_NODE;
+  
+  // Add stake based on capacity (1 HCCO per 10GB)
+  requiredStake += Math.ceil(nodeCapacityGB / 10);
+  
+  // Add stake based on processing power (5 HCCO per 100 compute units)
+  requiredStake += Math.ceil((processingPower / 100) * 5);
+  
+  // Add stake based on specialization
+  const specializationMultipliers = {
+    'compute': 1.2,
+    'storage': 1.1,
+    'inference': 1.5,
+    'training': 2.0,
+    'default': 1.0
+  };
+  
+  const multiplier = specializationMultipliers[specialization] || specializationMultipliers.default;
+  requiredStake = Math.ceil(requiredStake * multiplier);
+  
+  return requiredStake;
+}
+
+/**
+ * Check if a node or organization has achieved SOLID status.
+ * 
+ * @param {number} completedTasks - Number of successfully completed AI worker tasks
+ * @param {number} uptimePercentage - Uptime percentage over the last 30 days
+ * @param {number} qualityRating - Quality rating out of 5.0
+ * @param {number} poolOperationDays - Days the entity has operated their own pool
+ * @param {string} verificationStatus - Stellar federation verification status
+ * @returns {boolean} - Whether the entity has achieved SOLID status
+ */
+function checkSolidStatus(completedTasks, uptimePercentage, qualityRating, poolOperationDays, verificationStatus) {
+  // Check all requirements
+  if (completedTasks < MIN_COMPLETED_TASKS) {
+    console.log(`SOLID check failed: Completed tasks (${completedTasks}) below minimum (${MIN_COMPLETED_TASKS})`);
+    return false;
+  }
+  
+  if (uptimePercentage < MIN_UPTIME_PERCENTAGE) {
+    console.log(`SOLID check failed: Uptime (${uptimePercentage}%) below minimum (${MIN_UPTIME_PERCENTAGE}%)`);
+    return false;
+  }
+  
+  if (qualityRating < MIN_QUALITY_RATING) {
+    console.log(`SOLID check failed: Quality rating (${qualityRating}) below minimum (${MIN_QUALITY_RATING})`);
+    return false;
+  }
+  
+  if (poolOperationDays < MIN_POOL_OPERATION_DAYS) {
+    console.log(`SOLID check failed: Pool operation days (${poolOperationDays}) below minimum (${MIN_POOL_OPERATION_DAYS})`);
+    return false;
+  }
+  
+  if (verificationStatus !== 'verified') {
+    console.log(`SOLID check failed: Verification status (${verificationStatus}) is not 'verified'`);
+    return false;
+  }
+  
+  // All checks passed
+  console.log('SOLID status achieved: All eligibility requirements met');
+  return true;
+}
+
+/**
+ * Verify if an entity is eligible to join the main pool.
+ * 
+ * @param {Object} entity - Entity (node or organization) to verify
+ * @returns {Object} - Eligibility result with status and details
+ */
+function verifyMainPoolEligibility(entity) {
+  // Calculate required stake based on entity type
+  let requiredStake = 0;
+  if (entity.type === 'organization') {
+    requiredStake = calculateOrganizationStake(
+      entity.nodeCapacityGB,
+      entity.processingPower,
+      entity.dailyGasGeneration
+    );
+  } else {
+    requiredStake = calculateNodeStake(
+      entity.nodeCapacityGB,
+      entity.processingPower,
+      entity.specialization
+    );
+  }
+  
+  // Check if entity has staked enough
+  if (entity.stakedAmount < requiredStake) {
+    return {
+      eligible: false,
+      status: 'INSUFFICIENT_STAKE',
+      requiredStake: requiredStake,
+      currentStake: entity.stakedAmount,
+      shortfall: requiredStake - entity.stakedAmount,
+      details: `Entity has staked ${entity.stakedAmount} HCCO but requires ${requiredStake} HCCO.`
+    };
+  }
+  
+  // Check SOLID status
+  const hasSolidStatus = checkSolidStatus(
+    entity.completedTasks,
+    entity.uptimePercentage,
+    entity.qualityRating,
+    entity.poolOperationDays,
+    entity.verificationStatus
+  );
+  
+  if (!hasSolidStatus) {
+    return {
+      eligible: false,
+      status: 'NOT_SOLID',
+      details: 'Entity does not meet SOLID status requirements.'
+    };
+  }
+  
+  // Check if entity is in cooling off period after previous revocation
+  if (entity.lastRevocationDate) {
+    const daysSinceRevocation = (Date.now() - entity.lastRevocationDate) / (1000 * 60 * 60 * 24);
+    if (daysSinceRevocation < COOLING_OFF_PERIOD_DAYS) {
+      return {
+        eligible: false,
+        status: 'IN_COOLING_OFF',
+        daysRemaining: COOLING_OFF_PERIOD_DAYS - daysSinceRevocation,
+        details: `Entity is in cooling off period for ${Math.ceil(COOLING_OFF_PERIOD_DAYS - daysSinceRevocation)} more days.`
+      };
+    }
+  }
+  
+  // Entity is eligible to join the main pool
+  return {
+    eligible: true,
+    status: 'ELIGIBLE',
+    probationPeriod: PROBATION_PERIOD_DAYS,
+    requiredStake: requiredStake,
+    details: `Entity is eligible to join the main pool with a ${PROBATION_PERIOD_DAYS}-day probation period.`
+  };
+}
+
+// Example usage
+const exampleOrganization = {
+  type: 'organization',
+  name: 'Galaxy AI Solutions',
+  nodeCapacityGB: 10240,  // 10 TB
+  processingPower: 500,   // 500 compute units
+  dailyGasGeneration: 2.5,
+  stakedAmount: 2500,     // HCCO tokens staked
+  completedTasks: 1200,
+  uptimePercentage: 99.8,
+  qualityRating: 4.9,
+  poolOperationDays: 30,
+  verificationStatus: 'verified',
+  lastRevocationDate: null
+};
+
+const exampleNode = {
+  type: 'node',
+  name: 'AI-Worker-Node-42',
+  nodeCapacityGB: 2048,   // 2 TB
+  processingPower: 200,   // 200 compute units
+  specialization: 'inference',
+  stakedAmount: 300,      // HCCO tokens staked
+  completedTasks: 600,
+  uptimePercentage: 99.7,
+  qualityRating: 4.85,
+  poolOperationDays: 20,
+  verificationStatus: 'verified',
+  lastRevocationDate: null
+};
+
+// Export functions for use in the main pool implementation
+module.exports = {
+  calculateOrganizationStake,
+  calculateNodeStake,
+  checkSolidStatus,
+  verifyMainPoolEligibility
+};

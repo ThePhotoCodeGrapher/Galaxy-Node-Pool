@@ -1,0 +1,33 @@
+<!-- Version: 1.0.0 | Type: architecture | Protocol: .gal | Last Updated: 2025-05-28 -->
+
+# Galaxy Node Pool Architecture (.gal)
+
+## Overview
+The Galaxy Node Pool is a modular, Dockerized Go service that acts as a registry and discovery layer for Galaxy Network Nodes. It supports both public and private pools, node specialization, and secure, scalable deployment.
+
+## Main Net Federation & Incentives
+- Every Galaxy Node Pool (public or private) must connect to the main net registry for discoverability and protocol compliance.
+- Private pools pay registration/connection fees (in GAL or protocol tokens) to the main net.
+- Usage or transaction fees from private pool activity are routed through the main net, with a portion distributed to stakers and locked-in participants.
+- Main net provides advanced services (auditing, cross-pool discovery, insurance, etc.) for additional fees.
+- This ensures all pools contribute to the security, growth, and value of the main net ecosystem.
+- Stakers and locked-in participants benefit directly from increased pool activity and protocol adoption.
+
+## Components
+- **Pool Registry**: gRPC server for node registration, heartbeats, and discovery
+- **Node**: Service that registers with the pool and advertises specialization
+- **Clients**: Query the pool for available nodes (by specialization, org, etc.)
+
+## Security
+- TLS for all communication
+- Authentication for private/org pools
+- Role-based access control
+
+## Deployment
+- Docker-native, config-driven
+- Supports main/test/dev and org pools
+- DNS wildcards for scalable node addition
+
+## Extensibility
+- New pool/node types can be added without breaking compatibility
+- Designed for integration with Gelato Protocol and other modular systems

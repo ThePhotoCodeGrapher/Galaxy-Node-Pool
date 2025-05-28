@@ -1,0 +1,38 @@
+<!-- Version: 1.0.0 | Type: phases.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# PHASES.gal
+
+## Purpose
+Defines the development and deployment phases for the Galaxy Node Pool and Node components, following the Gelato Protocol standard.
+
+## Phase 1: Core Infrastructure (Current)
+- Implement public pool registry with gRPC API
+- Node registration, heartbeat, and discovery
+- Basic plugin system
+- Docker containerization
+- Main net federation (basic)
+
+## Phase 2: Private/Enterprise Pools
+- Authentication and authorization
+- Organization-specific pools
+- Enhanced security features
+- Advanced plugin system
+- Improved main net integration with fee distribution
+
+## Phase 3: Advanced Federation
+- Cross-pool discovery
+- Load balancing
+- Geographic distribution
+- High availability
+- Advanced metrics and monitoring
+- Full main net services integration
+
+## Phase 4: Ecosystem Growth
+- Third-party plugin marketplace
+- Advanced orchestration
+- AI-powered node selection
+- Predictive scaling
+- Full protocol compliance validation
+
+---
+
+# End of PHASES.gal

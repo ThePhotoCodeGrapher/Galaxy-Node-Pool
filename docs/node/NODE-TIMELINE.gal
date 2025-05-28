@@ -1,0 +1,13 @@
+<!-- Version: 1.0.0 | Type: timeline.galaxy.node | Protocol: .gal | Last Updated: 2025-05-28 -->
+# NODE-TIMELINE.gal
+
+## Purpose
+Tracks the major milestones, releases, and protocol changes for Galaxy Nodes.
+
+## Timeline
+- 2025-05-28: Node config and plugin docs scaffolded
+- 2025-05-28: Node protocol integration planned
+
+---
+
+# End of NODE-TIMELINE.gal

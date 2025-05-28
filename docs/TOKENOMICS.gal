@@ -1,0 +1,111 @@
+<!-- Version: 1.0.0 | Type: tokenomics.galaxy | Protocol: .gal | Last Updated: 2025-05-28 | AI-ID: CP-GAL-NODEPOOL-001 | Organization: Castle Palette Cloud A.I. | Website: https://hybridconnect.cloud/ -->
+# TOKENOMICS.gal
+
+## Token Overview
+
+### HCCO Token (HybridConnect Coin)
+- **Purpose**: Primary utility token for network operations
+- **Max Supply**: 1,000,000,000 HCCO
+- **Decimals**: 8
+- **Blockchain**: Stellar (XLM) based
+- **Smart Contract**: GCHCCO... (Stellar Asset Code)
+
+### GAL Token (Galaxy Token)
+- **Purpose**: Reward and governance token
+- **Max Supply**: 10,000,000,000 GAL
+- **Decimals**: 8
+- **Blockchain**: Native to Galaxy Network
+- **Distribution**: 
+  - 40% Node Rewards
+  - 25% Development Fund
+  - 20% Team & Advisors
+  - 10% Ecosystem Growth
+  - 5% Community & Marketing
+
+## Node Operation & Rewards
+
+### Node Types & Requirements
+| Type | HCCO Stake | Min Uptime | Hardware | GAL Rewards/Month |
+|------|------------|------------|-----------|-------------------|
+| Light | 1,000 | 95% | 2vCPU/4GB | 1,000 GAL |
+| Full | 5,000 | 97% | 4vCPU/8GB | 6,000 GAL |
+| Super | 25,000 | 99% | 8vCPU/32GB | 40,000 GAL |
+| Validator | 100,000 | 99.9% | 16vCPU/64GB | 200,000 GAL |
+
+### Reward Distribution
+- **Block Production**: 40% of rewards
+- **Network Services**: 30% (storage, bandwidth, computation)
+- **Staking Rewards**: 20%
+- **Governance**: 10% (voting on proposals)
+
+## Staking Mechanism
+
+### HCCO Staking
+```mermaid
+sequenceDiagram
+    participant Node
+    participant StakingContract
+    participant Blockchain
+    
+    Node->>StakingContract: Stake HCCO
+    StakingContract->>Blockchain: Lock HCCO
+    Blockchain-->>StakingContract: Confirm Lock
+    StakingContract-->>Node: Issue sHCCO (Staked HCCO)
+    
+    loop Monthly
+        StakingContract->>Node: Distribute GAL Rewards
+    end
+    
+    Node->>StakingContract: Unstake HCCO (after lock period)
+    StakingContract->>Node: Return HCCO + Final Rewards
+```
+
+### Slashing Conditions
+- **Downtime**: 1% of stake for >1% downtime
+- **Double Signing**: 5% of stake
+- **Malicious Behavior**: Up to 100% of stake
+
+## Token Utility
+
+### HCCO Use Cases
+1. **Network Access**: Required for node operation
+2. **Transaction Fees**: Paid in HCCO
+3. **Governance**: Weighted voting power
+4. **Service Payments**: For premium features
+
+### GAL Use Cases
+1. **Staking Rewards**: Distributed to node operators
+2. **Governance**: Voting on network upgrades
+3. **Ecosystem Incentives**: Developer rewards
+4. **Network Fees**: Partial payment option
+
+## Security Model
+
+### Multi-Signature Wallets
+- 3-of-5 signers required for treasury transactions
+- 24-hour time-lock on large withdrawals
+- Hardware security modules (HSM) for key storage
+
+### Smart Contract Security
+- Formal verification of critical contracts
+- 28-day timelock for contract upgrades
+- Emergency pause functionality
+
+## Roadmap
+
+### Q3 2025
+- Mainnet Launch
+- HCCO/GAL Token Swap
+- Basic Staking Live
+
+### Q4 2025
+- Governance Module
+- Advanced Node Features
+- First Community Proposal
+
+### Q1 2026
+- Cross-Chain Bridges
+- Enterprise Solutions
+- Ecosystem Grants
+
+<!-- End of Document -->

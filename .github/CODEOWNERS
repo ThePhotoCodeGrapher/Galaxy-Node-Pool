@@ -1,0 +1,21 @@
+# Default owners for everything in the repo
+* @castle-palette/engineering
+
+# Documentation
+/docs/ @castle-palette/docs
+
+# Enterprise features
+/internal/enterprise/ @castle-palette/enterprise
+/configs/enterprise/ @castle-palette/enterprise
+
+# Main pool implementation
+/internal/main-pool/ @castle-palette/core-team
+/configs/main-pool/ @castle-palette/core-team
+/cmd/main-pool-server/ @castle-palette/core-team
+
+# Security
+SECURITY.md @castle-palette/security
+
+# Release management
+CHANGELOG.md @castle-palette/release-managers
+VERSION @castle-palette/release-managers

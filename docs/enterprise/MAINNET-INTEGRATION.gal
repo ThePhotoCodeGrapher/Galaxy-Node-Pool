@@ -1,0 +1,46 @@
+<!-- Version: 1.0.0 | Type: integration.galaxy.mainnet | Protocol: .gal | Last Updated: 2025-05-28 -->
+# MAINNET-INTEGRATION.gal
+
+## Purpose
+Defines the integration between Galaxy Node Pools and the Galaxy Main Net, following the Gelato Protocol standard.
+
+## Main Net Integration Architecture
+
+### Overview
+Every Galaxy Node Pool (public or private) connects to the Galaxy Main Net, contributing to the network's value and enabling global node discovery and federation.
+
+### Components
+- **Registry Connection**: Pools register with the main net registry
+- **Federation Protocol**: Cross-pool discovery and communication
+- **Blockchain Integration**: Identity, payments, and rewards via Stellar
+- **Staker Rewards**: Distribution of fees to network stakers
+
+### Registration Flow
+1. Pool generates a Stellar keypair for identity
+2. Pool sends registration fee to main net account
+3. Pool submits metadata (domain, endpoint, capabilities)
+4. Main net verifies payment and adds pool to registry
+5. Pool receives confirmation and begins periodic heartbeats
+
+### Fee Structure
+- **Registration Fee**: One-time fee to join the main net (5 XLM)
+- **Activity Fee**: Percentage of node registration fees (2%)
+- **Transaction Fee**: Small fee per transaction (0.01 XLM)
+- **Distribution**: 70% to stakers, 20% to protocol development, 10% to operations
+
+## Value Proposition
+- **For Private Pools**: Global discovery, federation, compliance verification
+- **For Public Pools**: Additional traffic, reputation, incentives
+- **For Stakers**: Rewards from all pool activity
+- **For the Network**: Increased utility, security, and value
+
+## Optional Services
+- **Compliance Verification**: Verification of node compliance with protocol standards
+- **Dispute Resolution**: Mediation for disputes between nodes and clients
+- **Insurance**: Coverage for failed transactions or node downtime
+- **Analytics**: Network-wide analytics and insights
+- **Reputation System**: Cross-pool reputation tracking
+
+---
+
+# End of MAINNET-INTEGRATION.gal

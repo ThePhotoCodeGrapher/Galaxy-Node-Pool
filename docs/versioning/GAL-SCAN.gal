@@ -1,0 +1,56 @@
+<!-- Version: 1.0.0 | Type: scan.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# GAL-SCAN.gal
+
+## Purpose
+Documents the process for scanning and validating all `.gal` files in the Galaxy Node Pool project, following the Gelato Protocol standard.
+
+## Scanning Steps
+
+### 1. Find All .gal Files
+```bash
+find /root/galaxy-node-pool -name "*.gal" | sort
+```
+
+### 2. Validate .gal File Structure
+```bash
+# Check for required headers
+grep -l "Version:" $(find /root/galaxy-node-pool -name "*.gal")
+grep -l "Type:" $(find /root/galaxy-node-pool -name "*.gal")
+grep -l "Protocol:" $(find /root/galaxy-node-pool -name "*.gal")
+grep -l "Last Updated:" $(find /root/galaxy-node-pool -name "*.gal")
+
+# Files missing required headers
+for file in $(find /root/galaxy-node-pool -name "*.gal"); do
+  if ! grep -q "Version:" "$file" || ! grep -q "Type:" "$file" || ! grep -q "Protocol:" "$file" || ! grep -q "Last Updated:" "$file"; then
+    echo "Invalid header: $file"
+  fi
+done
+```
+
+### 3. Check Group References
+```bash
+# Ensure all .gal files are referenced in a group
+for file in $(find /root/galaxy-node-pool -name "*.gal" | grep -v "group"); do
+  filename=$(basename "$file")
+  if ! grep -q "$filename" $(find /root/galaxy-node-pool -name ".gal.group*"); then
+    echo "Not in any group: $file"
+  fi
+done
+```
+
+### 4. Validate Content Structure
+```bash
+# Check for Purpose section
+for file in $(find /root/galaxy-node-pool -name "*.gal"); do
+  if ! grep -q "## Purpose" "$file"; then
+    echo "Missing Purpose section: $file"
+  fi
+done
+```
+
+## Automated Scanning
+These steps can be automated in a script or CI/CD pipeline to ensure all `.gal` files remain compliant with the Gelato Protocol standards.
+
+---
+
+# End of GAL-SCAN.gal

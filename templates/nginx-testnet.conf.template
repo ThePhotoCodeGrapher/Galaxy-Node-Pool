@@ -1,0 +1,79 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ${pool_env}.pool.galaxy.net.${org_id}.asia.hybridconnect.cloud;
+    
+    # Redirect all HTTP requests to HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+    
+    # Let's Encrypt HTTP challenge
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name ${pool_env}.pool.galaxy.net.${org_id}.asia.hybridconnect.cloud;
+    
+    # SSL Configuration
+    ssl_certificate ${ssl_cert};
+    ssl_certificate_key ${ssl_key};
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+    
+    # Modern TLS configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    
+    # HSTS (optional, but recommended)
+    add_header Strict-Transport-Security "max-age=63072000" always;
+    
+    # OCSP Stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    
+    # Logs
+    access_log /var/log/nginx/${pool_env}.pool.galaxy.net.${org_id}.asia.hybridconnect.cloud.access.log;
+    error_log /var/log/nginx/${pool_env}.pool.galaxy.net.${org_id}.asia.hybridconnect.cloud.error.log;
+    
+    # API Service
+    location /api/ {
+        proxy_pass http://127.0.0.1:${api_port}/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # WebSocket Service
+    location /ws/ {
+        proxy_pass http://127.0.0.1:${ws_port}/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Web UI
+    location / {
+        proxy_pass http://127.0.0.1:${web_port}/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

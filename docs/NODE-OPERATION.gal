@@ -1,0 +1,202 @@
+<!-- Version: 1.0.0 | Type: guide.galaxy.node | Protocol: .gal | Last Updated: 2025-05-28 | AI-ID: CP-GAL-NODEPOOL-001 | Organization: Castle Palette Cloud A.I. | Website: https://hybridconnect.cloud/ -->
+# NODE-OPERATION.gal
+
+## Node Types & Requirements
+
+### Light Node
+- **Purpose**: Basic network participation
+- **Requirements**:
+  - 2 vCPU
+  - 4GB RAM
+  - 100GB SSD
+  - 10Mbps bandwidth
+- **Stake**: 1,000 HCCO
+- **Rewards**: Up to 1,000 GAL/month
+
+### Full Node
+- **Purpose**: Transaction validation
+- **Requirements**:
+  - 4 vCPU
+  - 8GB RAM
+  - 500GB SSD
+  - 50Mbps bandwidth
+- **Stake**: 5,000 HCCO
+- **Rewards**: Up to 6,000 GAL/month
+
+### Super Node
+- **Purpose**: Block production
+- **Requirements**:
+  - 8 vCPU
+  - 32GB RAM
+  - 2TB NVMe
+  - 100Mbps bandwidth
+- **Stake**: 25,000 HCCO
+- **Rewards**: Up to 40,000 GAL/month
+
+### Validator Node
+- **Purpose**: Consensus participation
+- **Requirements**:
+  - 16 vCPU
+  - 64GB RAM
+  - 4TB NVMe (RAID)
+  - 1Gbps bandwidth
+  - Redundant power
+- **Stake**: 100,000 HCCO
+- **Rewards**: Up to 200,000 GAL/month
+
+## Setup Guide
+
+### Prerequisites
+1. HCCO tokens in a compatible wallet
+2. Ubuntu 22.04 LTS (recommended)
+3. Docker & Docker Compose
+4. Public IP address
+5. Open ports: 26656, 26657, 1317
+
+### Installation Steps
+```bash
+# 1. Install dependencies
+sudo apt update
+sudo apt install -y docker.io docker-compose
+
+# 2. Create data directory
+mkdir -p /data/galaxy-node
+
+# 3. Create docker-compose.yml
+cat > docker-compose.yml << 'EOF'
+version: '3.7'
+services:
+  galaxy-node:
+    image: ghcr.io/castle-palette/galaxy-node:latest
+    container_name: galaxy-node
+    restart: unless-stopped
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "1317:1317"
+    volumes:
+      - /data/galaxy-node:/root/.galaxy
+    environment:
+      - MONIKER=YourNodeName
+      - CHAIN_ID=galaxy-1
+      - SEEDS=seed1.galaxynet.work,seed2.galaxynet.work
+      - PERSISTENT_PEERS=peer1.galaxynet.work,peer2.galaxynet.work
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+EOF
+
+# 4. Start the node
+docker-compose up -d
+
+# 5. Check logs
+docker logs -f galaxy-node
+```
+
+### Staking HCCO
+```bash
+# 1. Create wallet
+galaxy-keys add my-wallet
+
+# 2. Fund wallet with HCCO
+# Send HCCO to the displayed address
+
+# 3. Delegate to validator
+galaxy tx staking delegate \
+  $(galaxy keys show my-wallet --bech val -a) \
+  100000000uhcco \
+  --from my-wallet \
+  --chain-id galaxy-1 \
+  --gas auto \
+  --gas-adjustment 1.5 \
+  --gas-prices 0.1uhcco
+```
+
+## Monitoring & Maintenance
+
+### Health Checks
+```bash
+# Check sync status
+galaxy status | jq '.sync_info'
+
+# Check validator status
+galaxy query staking validator $(galaxy keys show my-wallet --bech val -a)
+
+# Check rewards
+galaxy query distribution rewards $(galaxy keys show my-wallet -a)
+```
+
+### Automation Scripts
+```bash
+# Auto-restart on failure
+sudo tee /etc/systemd/system/galaxy-node.service << 'EOF'
+[Unit]
+Description=Galaxy Node
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker-compose -f /path/to/docker-compose.yml up
+ExecStop=/usr/bin/docker-compose -f /path/to/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start
+sudo systemctl enable galaxy-node
+sudo systemctl start galaxy-node
+```
+
+## Troubleshooting
+
+### Common Issues
+1. **Node Not Syncing**
+   - Check peer connections
+   - Verify system time is accurate
+   - Ensure ports are open
+
+2. **Validator Jailed**
+   - Check for double signing
+   - Verify uptime requirements
+   - Check network connectivity
+
+3. **Low Rewards**
+   - Check commission rate
+   - Verify staking amount
+   - Monitor network conditions
+
+## Security Best Practices
+
+1. **Key Management**
+   - Use hardware wallets
+   - Enable multi-signature
+   - Regular key rotation
+
+2. **Server Hardening**
+   - Fail2Ban for SSH
+   - UFW firewall
+   - Regular updates
+   - Disable root login
+
+3. **Monitoring**
+   - Prometheus metrics
+   - Grafana dashboards
+   - AlertManager for notifications
+
+## Support
+
+### Resources
+- [Documentation](https://docs.hybridconnect.cloud)
+- [Status Page](https://status.hybridconnect.cloud)
+- [Community Forum](https://forum.hybridconnect.cloud)
+
+### Contact
+- Support: support@hybridconnect.cloud
+- Security: security@hybridconnect.cloud
+- Business: enterprise@hybridconnect.cloud
+
+<!-- End of Document -->

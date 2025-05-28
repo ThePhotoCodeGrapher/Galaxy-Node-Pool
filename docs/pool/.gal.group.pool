@@ -1,0 +1,18 @@
+<!-- Version: 1.0.0 | Type: group.galaxy.pool | Protocol: .gal | Last Updated: 2025-05-28 -->
+# .gal.group.pool
+
+## Purpose
+Defines the group of all Galaxy Node Pool protocol, config, and process files. Provides navigation and structure for pool-related `.gal` files.
+
+## Members
+- POOL-ARCHITECTURE.gal
+- POOL-CONFIG.gal
+- POOL-PLUGINS.gal
+- POOL-ROADMAP.gal
+- POOL-TIMELINE.gal
+- POOL-INIT.gal
+- POOL-CLI.gal
+
+---
+
+# End of .gal.group.pool

@@ -1,0 +1,42 @@
+<!-- Version: 1.0.0 | Type: cli.galaxy.node | Protocol: .gal | Last Updated: 2025-05-28 -->
+# NODE-CLI.gal
+
+## Purpose
+Documents the command-line interface for managing Galaxy Nodes, following the Gelato Protocol standard.
+
+## CLI Usage
+
+### Starting a Node
+```bash
+galaxy-cli node start --config configs/my-node.yaml
+```
+
+### Registering with a Pool
+```bash
+galaxy-cli node register --pool pool1.galaxy.network:50051
+```
+
+### Full Options
+```
+Usage:
+  galaxy-cli node [command]
+
+Available Commands:
+  start       Start a Galaxy node
+  register    Register a node with a pool
+
+Flags:
+  -c, --config string   Config file path (default "configs/example.yaml")
+  -v, --verbose         Enable verbose output
+```
+
+## Pool Registration
+Nodes must register with at least one pool to:
+- Be discoverable by clients
+- Advertise their specialization
+- Participate in the Galaxy Network
+- Receive heartbeat monitoring
+
+---
+
+# End of NODE-CLI.gal

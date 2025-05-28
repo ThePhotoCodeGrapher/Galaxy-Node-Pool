@@ -1,0 +1,88 @@
+<!-- Version: 1.0.0 | Type: rewards.galaxy.stakers | Protocol: .gal | Last Updated: 2025-05-28 -->
+# STAKER-REWARDS.gal
+
+## Purpose
+Defines the staker rewards system for the Galaxy Network, detailing how fees from pools are distributed to token stakers, following the Gelato Protocol standard.
+
+## Staker Rewards Architecture
+
+### Overview
+The Galaxy Network rewards stakers who lock their GAL tokens to support the network. Fees collected from all pools (both public and private) contribute to the reward pool, which is distributed to stakers based on their stake amount and duration.
+
+### Components
+- **Reward Pool**: Accumulation of fees from all pools
+- **Staking Contract**: Stellar-based smart contract for token locking
+- **Distribution Mechanism**: Algorithm for fair reward distribution
+- **Claim Process**: How stakers receive their rewards
+
+### Fee Sources
+- **Pool Registration**: One-time fee when pools register with main net
+- **Node Registration**: Fee when nodes register with pools
+- **Transaction Fees**: Small fee per transaction processed
+- **Service Fees**: Fees for optional services (compliance, insurance, etc.)
+
+### Distribution Formula
+Rewards are distributed based on:
+1. **Stake Amount**: Larger stakes receive proportionally more rewards
+2. **Stake Duration**: Longer staking periods receive higher reward rates
+3. **Network Activity**: Rewards scale with overall network activity
+
+## Implementation Details
+
+### Staking Process
+1. User locks GAL tokens in the staking contract
+2. Staking contract records stake amount and lock time
+3. User receives staking receipt (non-transferable token)
+4. Rewards accumulate based on network activity
+5. User can claim rewards without unstaking
+6. When unstaking, minimum lock period applies
+
+### Reward Distribution
+Rewards are distributed:
+- **Daily**: Small rewards distributed daily to active stakers
+- **Weekly**: Medium rewards distributed weekly based on stake duration
+- **Monthly**: Larger rewards distributed monthly based on network growth
+
+### Configuration
+```yaml
+staking:
+  minimum_stake: "100"  # Minimum GAL tokens to stake
+  lock_periods:
+    - period: "30d"
+      multiplier: 1.0
+    - period: "90d"
+      multiplier: 1.2
+    - period: "180d"
+      multiplier: 1.5
+    - period: "365d"
+      multiplier: 2.0
+  reward_distribution:
+    daily_percentage: 10
+    weekly_percentage: 30
+    monthly_percentage: 60
+  early_unstake_fee: 20  # Percentage penalty for early unstaking
+```
+
+## Reward Calculation Example
+For a staker with 1000 GAL tokens locked for 180 days:
+1. Base reward rate: 0.1% daily
+2. Duration multiplier: 1.5x
+3. Effective daily rate: 0.15%
+4. Daily reward: 1.5 GAL tokens
+5. Monthly reward: ~45 GAL tokens
+
+## Value Proposition
+- **For Stakers**: Passive income from network activity
+- **For the Network**: Security, stability, and aligned incentives
+- **For Pool Operators**: Contribution to network value and growth
+- **For Node Operators**: Access to a robust, incentivized network
+
+## Implementation Roadmap
+- **Phase 1**: Basic staking and reward distribution
+- **Phase 2**: Advanced staking tiers and bonuses
+- **Phase 3**: Governance rights for stakers
+- **Phase 4**: Decentralized control of reward parameters
+
+---
+
+# End of STAKER-REWARDS.gal

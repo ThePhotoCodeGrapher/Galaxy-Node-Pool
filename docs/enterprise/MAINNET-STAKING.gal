@@ -1,0 +1,95 @@
+<!-- Version: 1.0.0 | Type: staking.galaxy.mainnet | Protocol: .gal | Last Updated: 2025-05-28 | AI-ID: CP-GAL-NODEPOOL-001 | Organization: Castle Palette Cloud A.I. | Website: https://hybridconnect.cloud/ -->
+# MAINNET-STAKING.gal
+
+## Purpose
+Defines the staking requirements for connecting to the Galaxy main net, including HCCO token requirements for both nodes and pools.
+
+## Main Net Connection Requirements
+
+### Overview
+All enterprise features require a connection to the Galaxy main net, which in turn requires staking HCCO tokens. This staking mechanism ensures that participants have a vested interest in the network's success and provides economic security for the ecosystem.
+
+### Staking Requirements
+
+#### For Pools
+- **Minimum Stake**: 5,000 HCCO tokens
+- **Stake Duration**: Minimum 90 days lock period
+- **Stake Location**: Tokens must be staked in the official Galaxy Staking Contract on the Stellar blockchain
+- **Verification**: Pool must provide proof of stake during registration
+
+#### For Organizations
+- **Base Requirement**: 1,000 HCCO tokens per organization
+- **Scaling Requirement**: Additional tokens based on:
+  - Number of nodes (100 HCCO per node)
+  - Processing capacity (200 HCCO per 100 compute units)
+  - Storage capacity (50 HCCO per TB)
+- **Stake Duration**: Minimum 180 days lock period
+- **Enterprise Tier**: Organizations staking 50,000+ HCCO receive enterprise-tier benefits
+
+#### For Individual Nodes
+- **Minimum Stake**: 100 HCCO tokens per node
+- **Additional Requirements**: Based on node specialization:
+  - Compute nodes: +50 HCCO
+  - Storage nodes: +25 HCCO
+  - Inference nodes: +100 HCCO
+  - Training nodes: +200 HCCO
+- **Stake Duration**: Minimum 30 days lock period
+
+### Staking Process
+
+1. **Create Stellar Account**: Generate a Stellar account for staking
+2. **Acquire HCCO Tokens**: Purchase HCCO tokens from supported exchanges
+3. **Execute Staking Transaction**: Call the Galaxy Staking Contract with:
+   ```
+   {
+     "function": "stake",
+     "amount": "<HCCO amount>",
+     "duration": "<lock period in days>",
+     "entity_type": "<pool|organization|node>",
+     "entity_id": "<unique identifier>"
+   }
+   ```
+4. **Obtain Staking Receipt**: The contract returns a staking receipt token
+5. **Register with Main Net**: Use the staking receipt during registration
+
+### Benefits of Staking
+
+- **Access to Enterprise Features**: Federation, cross-pool discovery, etc.
+- **Reward Distribution**: Stakers receive a portion of network fees
+- **Governance Rights**: Voting power proportional to stake amount
+- **Reputation Boost**: Higher visibility and trust in the network
+- **Priority Processing**: Tasks from stakers receive priority execution
+
+### Unstaking Process
+
+- **Minimum Lock Period**: Must maintain stake for the minimum duration
+- **Unstaking Penalty**: 20% penalty for early unstaking
+- **Cooldown Period**: 14-day cooldown before tokens are released
+- **Automatic Renewal**: Option to auto-renew stake at expiration
+
+### Enterprise Requirements
+
+**Important**: Enterprise features are ONLY available to entities that:
+1. Have an active stake in the Galaxy Staking Contract
+2. Maintain a connection to the main net
+3. Pass regular verification checks
+
+Without meeting these requirements, the following features are unavailable:
+- Federation protocol
+- Cross-pool discovery
+- Stellar integration
+- Staker rewards
+- Main net services
+
+## Implementation Details
+
+The staking verification is implemented in the enterprise components, which are excluded from the open source repository. The verification process includes:
+
+1. **Stellar Blockchain Query**: Verify stake amount and duration
+2. **Cryptographic Verification**: Validate staking receipt authenticity
+3. **Regular Re-verification**: Periodic checks to ensure continued compliance
+4. **Automatic Disconnection**: If stake requirements are no longer met
+
+---
+
+# End of MAINNET-STAKING.gal

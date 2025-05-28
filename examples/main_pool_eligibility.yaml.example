@@ -1,0 +1,132 @@
+# Galaxy Node Pool - Main Pool Eligibility Configuration
+# This is an example configuration for the main pool eligibility requirements
+# In the actual implementation, this would be in the configs/main-pool directory
+# which is excluded from git for security and operational reasons
+
+# Staking requirements
+staking:
+  # Base staking amounts
+  organization_base: 1000  # Base HCCO tokens for organizations
+  node_base: 100           # Base HCCO tokens for individual nodes
+  
+  # Factors for calculating required stake
+  factors:
+    # Per TB of storage capacity
+    capacity_factor: 0.1
+    # Per 100 compute units
+    power_factor: 0.2
+    # Per daily GAS generation unit
+    gas_factor: 0.5
+  
+  # Specialization multipliers for node staking
+  specialization_multipliers:
+    compute: 1.2
+    storage: 1.1
+    inference: 1.5
+    training: 2.0
+    default: 1.0
+  
+  # Staking contract settings
+  contract:
+    stellar_address: "GAKXYZ...EXAMPLE"  # Stellar address for staking contract
+    minimum_lock_period: "30d"           # Minimum staking period
+    early_unstake_penalty: 20            # Percentage penalty for early unstaking
+
+# SOLID status requirements
+solid_status:
+  # Minimum number of completed AI worker tasks
+  min_completed_tasks: 500
+  
+  # Minimum uptime percentage over the last 30 days
+  min_uptime_percentage: 99.5
+  
+  # Minimum quality rating (out of 5.0)
+  min_quality_rating: 4.8
+  
+  # Minimum days of operating own pool
+  min_pool_operation_days: 14
+  
+  # Verification requirements
+  verification:
+    # Whether Stellar federation verification is required
+    stellar_required: true
+    # Whether identity verification is required
+    identity_required: true
+    # Whether node hardware verification is required
+    hardware_required: true
+
+# Probationary period settings
+probation:
+  # Duration of probationary period in days
+  duration_days: 7
+  
+  # Percentage reduction in task assignments during probation
+  task_reduction_percentage: 50
+  
+  # Enhanced monitoring frequency during probation (in minutes)
+  monitoring_frequency: 5
+  
+  # Whether stake is locked during probation
+  lock_stake: true
+
+# Eligibility maintenance requirements
+maintenance:
+  # Minimum ongoing uptime percentage
+  min_uptime: 99.5
+  
+  # Minimum ongoing quality rating
+  min_quality: 4.5
+  
+  # Performance review frequency in days
+  review_frequency: 30
+  
+  # Maximum allowed violations before eligibility review
+  max_violations: 3
+  
+  # Violation reset period in days
+  violation_reset_period: 90
+
+# Revocation settings
+revocation:
+  # Cooling off period after revocation in days
+  cooling_off_period: 30
+  
+  # Whether to allow re-application after cooling off
+  allow_reapplication: true
+  
+  # Maximum number of revocations allowed
+  max_revocations: 2
+  
+  # Permanent ban threshold (number of revocations)
+  permanent_ban_threshold: 3
+
+# HCCO to GAS conversion settings
+hcco_gas_conversion:
+  # Base conversion rate (HCCO to GAS)
+  base_rate: 0.01
+  
+  # Minimum HCCO required for GAS generation
+  min_hcco: 500
+  
+  # Maximum daily GAS generation per 1000 HCCO
+  max_daily_gas_per_1000: 5
+  
+  # Bonus multiplier for SOLID status
+  solid_bonus_multiplier: 1.5
+
+# Benefits for main pool participants
+benefits:
+  # Task priority boost percentage
+  priority_boost: 25
+  
+  # Fee reduction percentage
+  fee_reduction: 15
+  
+  # Reward multiplier for completed tasks
+  reward_multiplier: 1.2
+  
+  # Whether to grant governance voting rights
+  governance_rights: true
+  
+  # Whether to display SOLID status badge
+  display_badge: true

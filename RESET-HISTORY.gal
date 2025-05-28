@@ -1,0 +1,16 @@
+<!-- Version: 1.0.0 | Type: reset.galaxy | Protocol: .gal | Last Updated: 2025-05-28 -->
+# RESET-HISTORY.gal
+
+## Purpose
+This file documents the complete reset of the Galaxy Node Pool git history, performed according to the Gelato Protocol and C.P.A.C.O. commit conventions.
+
+## Details
+- Date: 2025-05-28
+- Operation: All previous git history deleted; only the current state remains.
+- Commit: (AI-ID: CLAUDE-3.7-SONNET-ARCH-20250528-HCC01) [phase]: Reset git history to current state (Gelato Protocol)
+- Reason: Repository cleanup and alignment with HybridConnect.Cloud standards.
+- Attribution: Operation performed by C.A.S.T.L.E. AI (CLAUDE-3.7-SONNET-ARCH-20250528-HCC01)
+
+---
+
+# End of RESET-HISTORY.gal
